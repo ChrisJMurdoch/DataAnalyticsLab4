@@ -62,12 +62,14 @@ class Enricher {
             // Sum per-gender sums
             let nSalary=0, nMaleSalary=0, nFemaleSalary=0, nOtherSalary=0,
                 tSalary=0, tMaleSalary=0, tFemaleSalary=0, tOtherSalary=0,
+                tBase=0, tBonus=0, tStock=0,
                 tDuration=0, tExperience=0;
             company.salaries.forEach(function(salary) {
                 nSalary++, tSalary += salary.totalyearlycompensation;
                 if      (salary.gender=="Male")   nMaleSalary++,   tMaleSalary   += salary.totalyearlycompensation;
                 else if (salary.gender=="Female") nFemaleSalary++, tFemaleSalary += salary.totalyearlycompensation;
                 else if (salary.gender=="Other")  nOtherSalary++,  tOtherSalary  += salary.totalyearlycompensation;
+                tBase += salary.basesalary, tBonus += salary.bonus, tStock += salary.stockgrantvalue;
                 tDuration += salary.yearsatcompany;
                 tExperience += salary.yearsofexperience;
             });
@@ -77,13 +79,18 @@ class Enricher {
             company.meanMaleCompensation   = Math.round( tMaleSalary   / nMaleSalary   );
             company.meanFemaleCompensation = Math.round( tFemaleSalary / nFemaleSalary );
             company.meanOtherCompensation  = Math.round( tOtherSalary  / nOtherSalary  );
+
+            company.meanBase =  tBase  / nSalary;
+            company.meanBonus = tBonus / nSalary;
+            company.meanStock = tStock / nSalary;
+
             company.meanJobDuration = tDuration / nSalary;
             company.meanJobExperience = tExperience / nSalary;
 
             // Calculate scores
             company.equalityScore = Math.round( 100 * Math.min(
-                company.meanMaleCompensation / company.meanFemaleCompensation,
-                company.meanFemaleCompensation / company.meanMaleCompensation
+                company.meanMaleCompensation / company.meanCompensation,
+                company.meanFemaleCompensation / company.meanCompensation
             ) );
         });
 

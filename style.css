@@ -37,13 +37,17 @@ body {
 .company_card {
     padding: 16px 16px;
     width: 400px;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #EEFBFB;
 }
 .company_card:hover {
     background-color: #203647;
 }
 
-.company_card * {
+.company_card .top {
+    width: 368px;
+    height: 32px;
+}
+.company_card .top * {
     display: inline-block;
     height: 32px; /* In-line with 32x32 image */
     line-height: 32px;
@@ -53,10 +57,23 @@ body {
     overflow: hidden;
     color: white;
 }
-.company_card .logo     { width: 32px;  }
-.company_card .title    { width: 160px; cursor: pointer; }
-.company_card .salary   { width: 96px;  cursor: pointer; }
-.company_card .equality { width: 32px;  cursor: pointer; margin-right: 0; text-align: center; }
+.company_card .top .logo     { width: 32px;  }
+.company_card .top .title    { width: 160px; cursor: pointer; }
+.company_card .top .salary   { width: 96px;  cursor: pointer; }
+.company_card .top .equality { width: 32px;  cursor: pointer; margin-right: 0; text-align: center; }
+
+.company_card .expand {
+    width: 368px;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.2s;
+    transition-delay: 0.2s;
+}
+.company_card .expand.active {
+    margin-top: 16px;
+    width: 368px;
+    height: 50px;
+}
 
 /* Insight Bar */
 
