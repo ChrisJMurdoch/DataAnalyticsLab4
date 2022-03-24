@@ -80,7 +80,7 @@ function addEqualityBar(data, toEqId) {
         .attr("x", width * 0.5*maleBarRatio)
         .attr("width", width * 0.5*femaleBarRatio)
         .attr("height", barHeight)
-        .attr("fill", "#d93030");
+        .attr("fill", "#d9304c");
     
     svg.append("text")
         .attr("x", 10)

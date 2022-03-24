@@ -1,4 +1,9 @@
 
+/*
+Dark: #12232E
+
+*/
+
 /* Default overrides */
 
 html {
@@ -17,6 +22,17 @@ body {
     box-sizing: border-box;
 }
 
+/* General Purpose */
+
+.centre {
+    text-align: center;
+    font-weight: normal;
+}
+
+.axis {
+    font-size: 16px;
+}
+
 /* Company Bar */
 
 #company_bar {
@@ -27,6 +43,12 @@ body {
     background-color: #12232E;
     overflow-y: scroll;
     overflow-x: hidden;
+    transition: width 0.25s;
+}
+@media (max-width: 1200px) {
+    #company_bar {
+        width: 272px;
+    }
 }
 #company_bar::-webkit-scrollbar {
     display: none;
@@ -34,11 +56,21 @@ body {
 
 .company_card {
     padding: 16px 16px;
-    width: 400px;
+    width: calc(100%);
     border-bottom: 1px solid #EEFBFB;
+    overflow: hidden;
 }
 .company_card:hover {
     background-color: #203647;
+}
+
+.salary {
+    padding-left: 10px;
+}
+.salary, .equality {
+    background-color: #00425a;
+    box-shadow: 0 0 5px rgba(0,0,0,0.75);
+    border-radius: 3px;
 }
 
 .company_card .top {
@@ -84,18 +116,19 @@ body {
     flex-direction: column;
     justify-content: start;
 }
+@media (max-width: 1200px) {
+    #insight_bar {
+        width: calc(100% - 272px);
+    }
+}
 
 #insight_bar > * {
-    padding: 16px;
     width: 100%;
-    height: 64px;
-    line-height: 32px;
     background-color: #EEFBFB;
-    font-size: 18px;
-    box-shadow: 0 0 0px #12232E;
     color: #12232E;
 }
 #insight_bar > .title {
+    padding: 8px;
     background-color: #12232E;
     color: #EEFBFB;
 }
@@ -107,4 +140,85 @@ body {
 }
 #insight_bar > .title > .right {
     float: right;
+}
+#insight_bar > .header {
+    width: 100%;
+    padding: 8px;
+    font-size: 24px;
+    text-align: center;
+    color: #12232E;
+}
+
+#job_select {
+    display: flex;
+}
+
+#insight_bar > .header {
+    padding: 30px 20% 10px 0%;
+}
+
+/* Pie Chart */
+
+#job_pie {
+    float: left;
+    padding: 0;
+    width: 50%;
+}
+
+.pie_segment {
+    transition: transform 0.5s, filter 0.5s;
+    cursor: pointer;
+    stroke: white;
+}
+
+.pie_segment:hover {
+    transform: scale(1.1);
+    filter: brightness(1.25);
+}
+
+/* Job List */
+
+#joblist {
+    padding: 10px 5px;
+    width: 50%;
+    overflow-y: scroll;
+}
+
+#joblist > .job_entry {
+    margin: 5px 0;
+    color: #005270;
+    cursor: pointer;
+}
+#joblist > .job_entry:hover {
+    filter: brightness(1.25);
+}
+
+/* Breakdown */
+
+#breakdown_header {
+    padding-top: 50px !important;
+}
+
+#breakdown_section {
+    width: 100%;
+}
+
+#breakdown_left {
+    float: left;
+    width: 50%;
+}
+
+#breakdown_right {
+    float: right;
+    width: 50%;
+}
+
+#yoe_bar {
+    padding: 0;
+    width: 100%;
+}
+
+#education_pie {
+    padding: 0;
+    width: 100%;
 }

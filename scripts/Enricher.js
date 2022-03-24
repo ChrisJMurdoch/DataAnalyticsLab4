@@ -26,6 +26,10 @@ class Enricher {
         // Filter data
         return data.filter(function(record) {
 
+            // Create rounded date
+            record.roundedDate = new Date(record.timestamp);
+            record.roundedDate.setDate(1);
+
             // Parse numerical properties and ensure valid numbers
             numericalProperties.forEach((property) => {
                 record[property] = parseInt(record[property]);

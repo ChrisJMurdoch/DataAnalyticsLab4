@@ -15,12 +15,35 @@
     <div id="company_bar"></div>
 
     <div id="insight_bar">
+
         <div class="title">
-            <img src="https://www.google.com/favicon.ico"></img>
-            <div>Google</div>
-            <div class="right">Salaries: 2382</div>
+            <img id="insight_logo" src="https://www.amazon.com/favicon.ico"></img>
+            <div id="insight_title">Amazon</div>
+            <div id="insight_count" class="right">4235 Reported Salaries</div>
         </div>
-        <div>Text paragraph.</div>
+
+        <div id="insight_header" class="header">Roles at Amazon</div>
+        <div id="job_select">
+            <svg id="job_pie"></svg>
+            <div id="joblist"></div>
+        </div>
+        
+        <div id="breakdown_header" class="header">Breakdown for Software Engineer</div>
+
+            <div class="breakdown_section">
+
+            <div id="breakdown_left">
+                <h3 class="centre">Years of Experience</h3>
+                <svg id="yoe_bar"></svg>
+            </div>
+            
+            <div id="breakdown_right">
+                <h3 class="centre">Education Levels</h3>
+                <svg id="education_pie"></svg>
+            </div>
+        
+        </div>
+
     </div>
 
     <!-- Utilities -->
@@ -28,6 +51,10 @@
 
     <!-- Graphs -->
     <script src='./scripts/lightBar.js'></script>
+    <script src='./scripts/lineChart.js'></script>
+    <script src='./scripts/pieChart.js'></script>
+    <script src='./scripts/jobList.js'></script>
+    <script src='./scripts/barChart.js'></script>
 
     <!-- Main script -->
     <script src='./scripts/main.js'></script>
