@@ -3,12 +3,13 @@ class BarChart {
     
     static aspectRatio = 2;
 
-    constructor(identifier) {
+    constructor(identifier, brushCall) {
             
         // Set the dimensions and margins of the graph
         this.margin = { top: 30, right: 100, bottom: 30, left: 100 };
         this.width = d3.select(`#${identifier}`).node().getBoundingClientRect().width - this.margin.left - this.margin.right;
         this.height = (this.width / BarChart.aspectRatio) - this.margin.top - this.margin.bottom;
+        this.brushCall = brushCall;
 
         // Create SVG
         this.identifier = identifier;
@@ -69,7 +70,7 @@ class BarChart {
             .call(d3.axisRight(y));*/
 
         // Bind new data to rects
-        const u = this.svg.selectAll("rect")
+        const u = this.svg.selectAll(".bar_rect")
             .data(data);
 
         // Remove extra bars
@@ -79,6 +80,7 @@ class BarChart {
         // Add and transition new bars
         u.enter()
             .append("rect")
+            .classed("bar_rect", true)
             .attr("x", (d) => x(d[0]))
             .attr("y", (d) => y(d[1]))
             .merge(u)
@@ -89,5 +91,32 @@ class BarChart {
             .attr("width", x.bandwidth())
             .attr("height", (d) => this.height - y(d[1]))
             .attr("fill", "FireBrick");
+        
+        // Add brushing
+        const brushCall = this.brushCall;
+        this.svg.call( d3.brushX()
+            .extent( [ [0,0], [this.width, this.height] ] )
+            .on("end", (brush) => {
+
+                console.log("brush", brush.selection);
+
+                // Get selection
+                const selection = new Set();
+                this.svg.selectAll(".bar_rect")
+                    .each( function(data) {
+                        const elem = d3.select(this);
+                        const coords = elem.attr("x");
+                        if ( coords > brush.selection[0] && coords < brush.selection[1] ) {
+                            console.log("Selected");
+                            let yOE;
+                            elem.each( (d) => { yOE = d[0] } );
+                            selection.add(yOE);
+                        }
+                    });
+                
+                // Call brush call with selection
+                brushCall(selection);
+            })
+        );
     }
 }

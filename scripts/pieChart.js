@@ -13,7 +13,7 @@ class PieChart {
         this.svg = d3.select(`#${identifier}`)
             .style("height", height)
             .append("g")
-            .attr("transform", `translate(${width/2},${height/2})`);
+            .attr("transform", `translate(${(width/2)*0.65},${height/2})`);
 
         // Create pie without size sorting
         this.pie = d3.pie()
@@ -63,7 +63,8 @@ class PieChart {
                 this.svg.select(`#_${data.data[0].replaceAll(invalidChars, "_")}`)
                     .style("opacity", 0);
             })
-            .classed("pie_segment", true);
+            .classed("pie_segment", true)
+            .on("click", (event, data) => displayRole(data.data[0]));
         paths.transition()
             .duration(1000)
             .attrTween("d", (d, i) => {

@@ -1,51 +1,50 @@
 
 function addSalaryBar(data, toSalId) {
 
+    // Add svg
     const div = d3.select(`#${toSalId(data)}`);
     const width = div.node().getBoundingClientRect().width,
           height = 32
           barHeight = 4;
-    
     const svg = div.append("svg")
         .attr("width", width)
         .attr("height", height);
     
+    // Calculate averages and scores
     const baseFraction = data.meanBase/data.meanCompensation,
           bonusFraction = data.meanBonus/data.meanCompensation,
           stockFraction = data.meanStock/data.meanCompensation;
     
+    // Append bars
     svg.append("rect")
         .attr("x", width * (0))
         .attr("width", width * baseFraction)
         .attr("height", barHeight)
         .attr("fill", "#007CC7");
-    
     svg.append("rect")
         .attr("x", width * (baseFraction))
         .attr("width", width * bonusFraction)
         .attr("height", barHeight)
         .attr("fill", "#4DA8DA");
-    
     svg.append("rect")
         .attr("x", width * (baseFraction+bonusFraction))
         .attr("width", width * stockFraction)
         .attr("height", barHeight)
         .attr("fill", "#EEFBFB");
     
+    // Append labels
     svg.append("text")
         .attr("x", 10)
         .attr("y", barHeight+20)
         .attr("text-anchor", "start")
         .text(`${(baseFraction*100).toFixed(0)}% Salary`)
         .attr("fill", "#007CC7");
-    
     svg.append("text")
         .attr("x", width * Math.min(baseFraction+bonusFraction*0.5, 0.625))
         .attr("y", barHeight+20)
         .attr("text-anchor", "middle")
         .text(`${(bonusFraction*100).toFixed(0)}% Bonus`)
         .attr("fill", "#4DA8DA");
-
     svg.append("text")
         .attr("x", width)
         .attr("y", barHeight+20)
@@ -56,32 +55,34 @@ function addSalaryBar(data, toSalId) {
 
 function addEqualityBar(data, toEqId) {
 
+    // Add svg
     const div = d3.select(`#${toEqId(data)}`);
     const width = div.node().getBoundingClientRect().width,
           height = 40
           barHeight = 4;
-    
     const svg = div.append("svg")
         .attr("width", width)
         .attr("height", height);
     
+    // Calculate averages and scores
     const maleFraction   = data.meanMaleCompensation   / data.meanCompensation,
           femaleFraction = data.meanFemaleCompensation / data.meanCompensation;
     const maleBarRatio   = 2 * maleFraction   / (maleFraction+femaleFraction),
           femaleBarRatio = 2 * femaleFraction / (maleFraction+femaleFraction);
     
+    // Append bars
     svg.append("rect")
         .attr("x", width * (0))
         .attr("width", width * 0.5*maleBarRatio)
         .attr("height", barHeight)
         .attr("fill", "#007CC7");
-    
     svg.append("rect")
         .attr("x", width * 0.5*maleBarRatio)
         .attr("width", width * 0.5*femaleBarRatio)
         .attr("height", barHeight)
         .attr("fill", "#d9304c");
     
+    // Append labels
     svg.append("text")
         .attr("x", 10)
         .attr("y", barHeight+20)
@@ -95,6 +96,7 @@ function addEqualityBar(data, toEqId) {
         .text(`of Mean`)
         .attr("fill", "#EEFBFB");
     
+    // Append labels
     svg.append("text")
         .attr("x", width)
         .attr("y", barHeight+20)
@@ -107,7 +109,8 @@ function addEqualityBar(data, toEqId) {
         .attr("text-anchor", "end")
         .text(`of Mean`)
         .attr("fill", "#EEFBFB");
-    
+
+    // Append 50% line
     svg.append("rect")
         .attr("x", width * 0.5 - 1)
         .attr("width", 2)

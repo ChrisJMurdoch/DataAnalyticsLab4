@@ -1,7 +1,6 @@
 
 const salaryDataUrl = "https://raw.githubusercontent.com/ChrisJMurdoch/DataAnalyticsLab4/main/data/salary_data.csv";
 const invalidChars = /\.| |&|'/gm;
-let companyMap;
 
 d3.csv(salaryDataUrl).then(function(data) {
     
@@ -85,7 +84,7 @@ d3.csv(salaryDataUrl).then(function(data) {
 
     jobPie = new PieChart("job_pie");
     educationPie = new PieChart("education_pie");
-    yoeBar = new BarChart("yoe_bar");
+    yoeBar = new BarChart("yoe_bar", displayExperience);
 
     displayCompanyInsights("Amazon");
 });
@@ -99,13 +98,13 @@ function displayCompanyInsights(companyName) {
     d3.select("#insight_header").text(`Roles at ${companyName}`);
 
     // Count job types in list
-    const jobTypes = new Map();
+    let jobTypes = new Map();
     companyMap.get(companyName).salaries.forEach((salary) => {
         if (!jobTypes.has(salary.title))
             jobTypes.set(salary.title, 0);
         jobTypes.set(salary.title, jobTypes.get(salary.title)+1);
     });
-    let jobTypesList = [];
+    jobTypesList = [];
     for (let type of jobTypes)
         jobTypesList.push(type);
     jobTypesList = jobTypesList.sort( (a,b) => b[1] - a[1] );
@@ -114,18 +113,55 @@ function displayCompanyInsights(companyName) {
     jobPie.update(jobTypesList.slice(0, 8), "#005270");
     updateJobList(jobTypesList);
 
-    // Breakdown Pies
+    // Default to Software Engineer
+    currentCompanyName = companyName;
+    displayRole("Software Engineer");
+}
+
+function displayRole(roleName) {
+    
+    // Change text
+    d3.select("#breakdown_header").text(`Breakdown for ${roleName}`);
+
+    // Breakdown Pie
     educationPie.update(countOccurrences(
-        companyMap.get(companyName).salaries,
+        companyMap.get(currentCompanyName).salaries.filter((salary) => salary.title === roleName),
         (salary) => salary.Education,
     ), "green");
 
-    // Breakdown Bars
+    // Breakdown Bar
     yoeBar.update(countOccurrences(
-        companyMap.get(companyName).salaries,
+        companyMap.get(currentCompanyName).salaries.filter((salary) => salary.title === roleName),
         (salary) => salary.yearsofexperience,
         (a,b) => a[0] - b[0]
-    ), "red");
+    ));
+    
+    // Default to full selection
+    currentRoleName = roleName;
+    displayExperience(null);
+}
+
+function displayExperience(selectedYears) {
+
+    // Filter data
+    let data = companyMap.get(currentCompanyName).salaries.filter( (salary) => salary.title===currentRoleName );
+    if (selectedYears!==null)
+        data = data.filter( (salary) => selectedYears.has(`${salary.yearsofexperience}`) );
+
+    // Get averages
+    let sumBase=0, sumBonus=0, sumStock=0;
+    for (let salary of data) {
+        sumBase += salary.basesalary;
+        sumBonus += salary.bonus;
+        sumStock += salary.stockgrantvalue;
+    }
+
+    // Change text
+    d3.select("#t_role").text(currentRoleName);
+    d3.select("#t_company").text(currentCompanyName);
+    d3.select("#t_base").text(`$${Math.round(sumBase/data.length).toLocaleString()}`);
+    d3.select("#t_bonus").text(`$${Math.round(sumBonus/data.length).toLocaleString()}`);
+    d3.select("#t_stock").text(`$${Math.round(sumStock/data.length).toLocaleString()}`);
 }
 
 function countOccurrences(data, getLabel, sort) {
